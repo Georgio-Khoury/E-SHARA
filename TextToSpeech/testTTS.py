@@ -1,7 +1,7 @@
 import wave
 from piper.voice import PiperVoice
 
-model = "/home/milan/Desktop/FYP2/piper/models/en_US-lessac-high.onnx"
+model = "/home/milan/E-SHARA/TextToSpeech/models/en_US-lessac-high.onnx"
 voice = PiperVoice.load(model)
 text = "Hello from Eshara team ! My name is Razan."
 wav_file = wave.open("output.wav", "w")

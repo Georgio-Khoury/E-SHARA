@@ -1,7 +1,7 @@
 import wave
 from piper.voice import PiperVoice
 
-model2 = "/home/milan/Desktop/FYP2/piper/models/ar_JO-kareem-medium.onnx"
+model2 = "/home/milan/E-SHARA/TextToSpeech/models/ar_JO-kareem-medium.onnx"
 voice2 = PiperVoice.load(model2)
 text2 = " مرحبا من فريق إشارة اضغط على الزر الاحمر للبدء"
 wav_file2 = wave.open("output2.wav", "w")
