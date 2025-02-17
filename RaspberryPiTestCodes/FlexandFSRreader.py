@@ -31,3 +31,7 @@ except KeyboardInterrupt:
 
 finally:
     spi.close()  # Close the SPI connection
+
+
+
+ #this code simply reads the value of the flex sensor connected to channel 7 of the MCP3008 ADC and prints it to the console. The program runs in an infinite loop, reading the sensor value every 0.5 seconds. The program can be terminated by pressing Ctrl + C, which will print "Exiting program." to the console and close the SPI connection.   

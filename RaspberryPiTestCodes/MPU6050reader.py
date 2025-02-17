@@ -54,3 +54,5 @@ try:
 
 except KeyboardInterrupt:
     print("Exiting program.")
+
+#this code reads the raw accelerometer and gyroscope data from the MPU6050 sensor and prints it to the console. The program runs in an infinite loop, reading the sensor values every 0.01 seconds. The program can be terminated by pressing Ctrl + C, which will print "Exiting program." to the console.

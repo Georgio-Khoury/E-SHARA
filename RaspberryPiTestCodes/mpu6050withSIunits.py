@@ -77,3 +77,6 @@ try:
 
 except KeyboardInterrupt:
     print("Exiting program.")
+
+
+#this code reads the raw accelerometer and gyroscope data from the MPU6050 sensor, converts it to SI units (m/s� for acceleration and �/s for angular velocity), and prints the values to the console. The program runs in an infinite loop, reading the sensor values every 0.01 seconds. The program can be terminated by pressing Ctrl + C, which will print "Exiting program." to the console.

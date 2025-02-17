@@ -115,3 +115,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+#this code reads the accelerometer and gyroscope data from the MPU6050 sensor and the FSR data from the MCP3008 ADC. The accelerometer and gyroscope data are converted to SI units (m/s� and �/s) and the FSR data is read from channel 7 of the ADC. The data is then saved to a CSV file with a timestamp for each sample. The program runs for 8 seconds, sampling the data at a rate of 200 Hz for the IMU and 10 Hz for the FSR sensor. The program uses multiprocessing to read the FSR data in a separate process to avoid blocking the IMU sampling process. The data is saved to a CSV file named "imu_fsr_dataset.csv" in the same directory as the script. The program can be terminated by pressing Ctrl + C, which will print "Dataset recording complete." to the console.
