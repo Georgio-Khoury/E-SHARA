@@ -1,6 +1,6 @@
-# BLE Sensor Data Transmission--Arduino client to Raspberry Pi server
+# BLE Sensor Data Transmission--Arduino server to Raspberry Pi client
 
-This project transmits sensor data from an **Arduino BLE microcontroller** to a **Raspberry Pi** over Bluetooth Low Energy (BLE). The data consists of:
+This project transmits sensor data from an **Arduino esp 32 microcontroller** to a **Raspberry Pi** over Bluetooth Low Energy (BLE). The data consists of:
 - **3 FSR 402 sensors**
 - **5 Flex sensors**
 - **IMU (Acceleration: x, y, z & Rotation: x, y, z)**
@@ -10,7 +10,7 @@ This project transmits sensor data from an **Arduino BLE microcontroller** to a 
 
 ## Hardware Requirements
 
-Connect the sensors to the Arduino BLE microcontroller 
+Connect the sensors to the Arduino esp32 microcontroller 
 
 ##  Software Setup
 
@@ -29,7 +29,7 @@ pip install bluepy pandas
 
 ### 🔹 3. Upload BLE Server Code to Arduino
 
-- **Be sure to connect the BLE Arduino to your laptop via USB**
+- **Be sure to connect the esp32 Arduino to your laptop via USB**
 - **Open Arduino IDE on your Laptop**
 - **Install ArduinoBLE and Arduino_LSM9DS1 libraries**
 - **Upload the BLE_server.cpp code to the arduino**
@@ -47,7 +47,7 @@ bluetoothctl
 scan on
 ```
 
-Find the Arduino BLE and note the MAC address to use it in the BLE_client.py code.
+Find the Arduino esp32 and note the MAC address to use it in the BLE_client.py code.
 
 ```bash
 scan off
