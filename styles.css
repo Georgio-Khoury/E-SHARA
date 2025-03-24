@@ -107,6 +107,7 @@ header {
 nav ul {
     display: flex;
     list-style: none;
+    margin-right: 15px;
 }
 
 nav ul li {
@@ -172,6 +173,7 @@ nav ul li a:hover::after {
     height: 100%;
     z-index: 0;
 }
+
 
 .tech-particles {
     position: absolute;
@@ -257,8 +259,43 @@ nav ul li a:hover::after {
     font-weight: 500;
     width: 100%;
     text-align: center;
-    animation: fadeIn 1.2s ease;
+    display: inline-block;
+    position: relative;
 }
+
+.hero-tagline .letter {
+    display: inline-block;
+    position: relative;
+    animation: fadeIn 1.2s ease, breakText 1.5s ease-in-out 2s forwards;
+    animation-play-state: paused;
+    transform-origin: center bottom;
+    opacity: 0;
+  }
+@keyframes breakText {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    30% {
+        transform: translateY(-5px) rotate(-2deg);
+    }
+    50% {
+        opacity: 0.8;
+        transform: translateY(10px) rotate(5deg) scale(1.1);
+    }
+    80% {
+        opacity: 0.5;
+        transform: translateY(-10px) rotate(-5deg);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(50px) rotate(15deg) scale(1.2);
+    }
+}
+.hero-tagline:hover .letter {
+    animation-play-state: running;
+  }
+
 
 .hero-description {
     position: relative;
@@ -522,7 +559,7 @@ section {
 
 .team-photo img {
     width: 100%;
-    height: auto;
+    height:600px;
     display: block;
 }
 
@@ -604,7 +641,7 @@ section {
 
 .about-image img {
     width: 100%;
-    height: auto;
+    height: 400px;
     transition: all 0.5s ease;
 }
 
