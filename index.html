@@ -35,7 +35,10 @@
         </header>
     <!-- Hero Section with Enhanced Visual Elements -->/* Center the main content */
     <section class="hero">
-        
+        <video autoplay loop muted playsinline class="video-background">
+            <source src="path/to/sign-language-tech-video.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
         <div class="hero-content">
           <div class="arabic-logo">E-S.H.A.R.A</div>
           <div class="arabic-logo">إشارة</div>
@@ -177,47 +180,67 @@
         </div>
     </section>
 
-    <!-- Technology Section -->
-    <section id="technology" class="tech-showcase">
-        <div class="container">
-            <div class="section-header fade-in">
-                <h2 class="section-title">Technology Behind E-S.H.A.R.A</h2>
-                <p class="section-subtitle">Explore the innovative components that power our smart translation glove.</p>
+ <!-- Technology Section -->
+<section id="technology" class="tech-showcase">
+    <div class="container">
+        <div class="section-header fade-in">
+            <h2 class="section-title">Technology Behind E-S.H.A.R.A</h2>
+            <p class="section-subtitle">Explore the innovative components that power our smart translation glove.</p>
+        </div>
+        <div class="tech-diagram fade-in">
+            
+            <!-- Interactive sensor points with images -->
+            <div class="sensor-point" style="top: 35%; left: 25%;" data-sensor="flex">
+                <img src="images/flex-Photoroom.png" alt="Flex Sensor" class="sensor-image">
             </div>
-            <div class="tech-diagram fade-in">
-                <img src="" alt="E-S.H.A.R.A Glove Diagram" class="hand-diagram">
-                
-                <!-- Interactive sensor points -->
-                <div class="sensor-point" style="top: 35%; left: 25%;" data-sensor="flex"></div>
-                <div class="sensor-info" id="flex-info" style="top: 28%; left: 28%;">
-                    <h4 class="sensor-title">Flex Sensors</h4>
-                    <p class="sensor-description">High-precision sensors that detect finger bending and flexing, enabling accurate gesture recognition.</p>
-                </div>
-                
-                <div class="sensor-point" style="top: 45%; left: 35%;" data-sensor="fsr"></div>
-                <div class="sensor-info" id="fsr-info" style="top: 38%; left: 38%;">
-                    <h4 class="sensor-title">Force Sensitive Resistors</h4>
-                    <p class="sensor-description">Capture pressure feedback for enhanced sign differentiation and detection of subtle gestures.</p>
-                </div>
-                
-                <div class="sensor-point" style="top: 55%; left: 45%;" data-sensor="imu"></div>
-                <div class="sensor-info" id="imu-info" style="top: 48%; left: 48%;">
-                    <h4 class="sensor-title">IMU Sensor</h4>
-                    <p class="sensor-description">Tracks hand orientation and movement during dynamic gestures using accelerometer and gyroscope data.</p>
-                </div>
-                
-                <div class="sensor-point" style="top: 65%; left: 55%;" data-sensor="processor"></div>
-                <div class="sensor-info" id="processor-info" style="top: 58%; left: 58%;">
-                    <h4 class="sensor-title">Raspberry Pi Processor</h4>
-                    <p class="sensor-description">Powerful microcomputer that runs machine learning algorithms and manages data processing and communication.</p>
-                </div>
-                
-                <div class="sensor-point" style="top: 75%; left: 65%;" data-sensor="display"></div>
-                <div class="sensor-info" id="display-info" style="top: 68%; left: 68%;">
-                    <h4 class="sensor-title">OLED Display</h4>
-                    <p class="sensor-description">High-contrast screen that shows text translations and visual feedback for speech-to-sign communication.</p>
-                </div>
+            <div class="sensor-info" id="flex-info" style="top: 28%; left: 28%;">
+                <h4 class="sensor-title">Flex Sensors</h4>
+                <p class="sensor-description">High-precision sensors that detect finger bending and flexing, enabling accurate gesture recognition.</p>
             </div>
+            
+            <div class="sensor-point" style="top: 45%; left: 35%;" data-sensor="fsr">
+                <img src="images/fsr-Photoroom.png" alt="Force Sensitive Resistor" class="sensor-image">
+            </div>
+            <div class="sensor-info" id="fsr-info" style="top: 38%; left: 38%;">
+                <h4 class="sensor-title">Force Sensitive Resistors</h4>
+                <p class="sensor-description">Capture pressure feedback for enhanced sign differentiation and detection of subtle gestures.</p>
+            </div>
+            
+            <div class="sensor-point" style="top: 55%; left: 45%;" data-sensor="imu">
+                <img src="images/mpu6050-Photoroom.png" alt="IMU Sensor" class="sensor-image">
+            </div>
+            <div class="sensor-info" id="imu-info" style="top: 48%; left: 48%;">
+                <h4 class="sensor-title">IMU Sensor</h4>
+                <p class="sensor-description">Tracks hand orientation and movement during dynamic gestures using accelerometer and gyroscope data.</p>
+            </div>
+            
+            <div class="sensor-point" style="top: 75%; left: 65%;" data-sensor="display">
+                <img src="images/oled-Photoroom.png" alt="OLED Display" class="sensor-image">
+            </div>
+            <div class="sensor-info" id="display-info" style="top: 68%; left: 68%;">
+                <h4 class="sensor-title">OLED Display</h4>
+                <p class="sensor-description">High-contrast screen that shows text translations and visual feedback for speech-to-sign communication.</p>
+            </div>
+            
+            <div class="sensor-point" style="top: 65%; left: 55%;" data-sensor="microphone">
+                <img src="images/microphone-Photoroom.png" alt="MEMS Microphone" class="sensor-image">
+            </div>
+            <div class="sensor-info" id="microphone-info" style="top: 58%; left: 58%;">
+                <h4 class="sensor-title">MEMS Microphone</h4>
+                <p class="sensor-description">Compact, high-sensitivity microphone that captures spoken input for speech recognition and translation.</p>
+            </div>
+            
+            <div class="sensor-point" style="top: 85%; left: 75%;" data-sensor="speaker">
+                <img src="images/speaker-Photoroom.png" alt="Miniature Speaker" class="sensor-image">
+            </div>
+            <div class="sensor-info" id="speaker-info" style="top: 78%; left: 78%;">
+                <h4 class="sensor-title">Miniature Speaker</h4>
+                <p class="sensor-description">Small yet powerful speaker that outputs translated speech for seamless voice-based communication.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
             
             <div class="section-header fade-in" style="margin-top: 80px;">
                 <h3 class="section-title">Signal Processing Flow</h3>
