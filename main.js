@@ -242,6 +242,7 @@ function typeWriterEffect() {
         // Start typing effect after a short delay
         setTimeout(typeWriter, 800);
     }
+
     
     // Subtitle typing effect on page load
     window.addEventListener('load', function() {
@@ -350,91 +351,27 @@ function initTechnicalSection() {
  */
 function initSensorPoints() {
     const sensorPoints = document.querySelectorAll('.sensor-point');
-    
+
     if (sensorPoints.length > 0) {
-        // Create sensor icons based on sensor type
         sensorPoints.forEach(point => {
-            const sensorType = point.getAttribute('data-sensor');
             // Remove any existing pulse elements
             const existingPulse = point.querySelector('.sensor-pulse');
             if (existingPulse) {
                 point.removeChild(existingPulse);
             }
-            
-            // Create sensor icon based on type
-            const sensorIcon = document.createElement('div');
-            sensorIcon.className = 'sensor-icon';
-            
-            // Add appropriate sensor icon/visualization based on sensor type
-            switch(sensorType) {
-                case 'flex':
-                    sensorIcon.innerHTML = `
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 14.5C7 14.5 7 12.5 7 11C7 9.5 8.5 9 9.5 9C10.5 9 11 9.5 11 11C11 12.5 11 19 11 19" stroke="#9D4EDD" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M11 12C11 12 11 10 11 9C11 7.5 12.5 7 13.5 7C14.5 7 15 7.5 15 9C15 10.5 15 19 15 19" stroke="#9D4EDD" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M15 10C15 10 15 8 15 7C15 5.5 16.5 5 17.5 5C18.5 5 19 5.5 19 7C19 8.5 19 19 19 19" stroke="#9D4EDD" stroke-width="2" stroke-linecap="round"/>
-                            <path d="M5 19H19" stroke="#9D4EDD" stroke-width="2" stroke-linecap="round"/>
-                        </svg>
-                        <span class="sensor-label">Flex</span>
-                    `;
-                    break;
-                case 'fsr':
-                    sensorIcon.innerHTML = `
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="6" stroke="#9D4EDD" stroke-width="2"/>
-                            <path d="M12 6V18" stroke="#9D4EDD" stroke-width="2"/>
-                            <path d="M16 8L8 16" stroke="#9D4EDD" stroke-width="2"/>
-                            <path d="M8 8L16 16" stroke="#9D4EDD" stroke-width="2"/>
-                        </svg>
-                        <span class="sensor-label">Force</span>
-                    `;
-                    break;
-                case 'mpu':
-                    sensorIcon.innerHTML = `
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="4" y="4" width="16" height="16" rx="2" stroke="#9D4EDD" stroke-width="2"/>
-                            <path d="M12 8V16" stroke="#9D4EDD" stroke-width="2"/>
-                            <path d="M8 12H16" stroke="#9D4EDD" stroke-width="2"/>
-                            <circle cx="12" cy="12" r="2" fill="#9D4EDD"/>
-                        </svg>
-                        <span class="sensor-label">IMU</span>
-                    `;
-                    break;
-                default:
-                    sensorIcon.innerHTML = `
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="12" cy="12" r="8" stroke="#9D4EDD" stroke-width="2"/>
-                            <circle cx="12" cy="12" r="3" fill="#9D4EDD"/>
-                        </svg>
-                        <span class="sensor-label">Sensor</span>
-                    `;
-            }
-            
-            // Append the sensor icon to the sensor point
-            point.appendChild(sensorIcon);
-            
+
             // Add hover effects
             point.addEventListener('mouseenter', function() {
-                // Add highlight effect
-                const icon = this.querySelector('.sensor-icon');
-                if (icon) {
-                    icon.style.transform = 'scale(1.2)';
-                    icon.style.boxShadow = '0 0 15px rgba(157, 78, 221, 0.8)';
-                    icon.classList.add('active');
-                }
+                this.classList.add('active');
             });
-            
+
             point.addEventListener('mouseleave', function() {
-                // Remove highlight effect
-                const icon = this.querySelector('.sensor-icon');
-                if (icon && !this.classList.contains('selected')) {
-                    icon.style.transform = '';
-                    icon.style.boxShadow = '';
-                    icon.classList.remove('active');
+                if (!this.classList.contains('selected')) {
+                    this.classList.remove('active');
                 }
             });
         });
-        
+
         // Hide all info panels when clicking elsewhere
         document.addEventListener('click', function(e) {
             if (!e.target.closest('.sensor-point') && !e.target.closest('.sensor-info')) {
@@ -443,53 +380,31 @@ function initSensorPoints() {
                 });
                 document.querySelectorAll('.sensor-point').forEach(point => {
                     point.classList.remove('selected');
-                    const icon = point.querySelector('.sensor-icon');
-                    if (icon) {
-                        icon.style.transform = '';
-                        icon.style.boxShadow = '';
-                        icon.classList.remove('active');
-                    }
                 });
             }
         });
-        
+
         // Show info on click
         sensorPoints.forEach(point => {
             point.addEventListener('click', function() {
                 const sensorType = this.getAttribute('data-sensor');
                 const infoElement = document.getElementById(`${sensorType}-info`);
-                
+
                 if (infoElement) {
-                    // Toggle info visibility
                     document.querySelectorAll('.sensor-info').forEach(info => {
                         if (info !== infoElement) {
                             info.classList.remove('active');
                         }
                     });
-                    
-                    // Toggle selected state of the current point
+
                     const wasSelected = this.classList.contains('selected');
-                    
-                    // Reset all points
+
                     document.querySelectorAll('.sensor-point').forEach(p => {
                         p.classList.remove('selected');
-                        const icon = p.querySelector('.sensor-icon');
-                        if (icon) {
-                            icon.style.transform = '';
-                            icon.style.boxShadow = '';
-                            icon.classList.remove('active');
-                        }
                     });
-                    
-                    // If it wasn't selected before, select it now
+
                     if (!wasSelected) {
                         this.classList.add('selected');
-                        const icon = this.querySelector('.sensor-icon');
-                        if (icon) {
-                            icon.style.transform = 'scale(1.2)';
-                            icon.style.boxShadow = '0 0 15px rgba(157, 78, 221, 0.8)';
-                            icon.classList.add('active');
-                        }
                         infoElement.classList.add('active');
                     } else {
                         infoElement.classList.remove('active');
@@ -499,7 +414,6 @@ function initSensorPoints() {
         });
     }
 }
-
 /**
  * Initialize Animation Effects
  */

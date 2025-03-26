@@ -262,13 +262,13 @@ nav ul li a:hover::after {
 }
 
 .hero-tagline {
-    font-size: 1.4rem;
+    font-size: 5rem !important;
     color: #FFFFFF;
     margin-bottom: 20px;
-    font-weight: 500;
+    font-weight: 700;
     width: 100%;
     text-align: center;
-    display: inline-block;
+    display: block;
     position: relative;
 }
 
@@ -307,68 +307,49 @@ nav ul li a:hover::after {
 
 
 .hero-description {
-    position: relative;
-    color: #ffffff;
-    font-size: 2em;
-    font-weight: bold;
-    margin: 0;
-    padding: 20px;
-    overflow: hidden;
-  }
-  
-  .hero-description .word {
+    font-size: 1.4rem;
+    color: #FFFFFF;
+    margin-bottom: 20px;
+    font-weight: 500;
+    width: 100%;
+    text-align: center;
     display: inline-block;
     position: relative;
-    margin-right: 10px;
   }
-  
-  .hero-description .letter {
+.hero-description .letter {
     display: inline-block;
     position: relative;
-    animation: shatter 4s ease-in-out forwards;
+    animation: fadeIn 1.2s ease, breakText 1.5s ease-in-out 2s forwards;
     animation-play-state: paused;
     transform-origin: center bottom;
     opacity: 0;
   }
-  
-  .hero-description:hover .letter {
-    animation-play-state: running;
-  }
-  
-  @keyframes shatter {
+  @keyframes breakText {
     0% {
-      transform: translateY(100px) rotate(10deg);
-      opacity: 0;
+        opacity: 1;
+        transform: scale(1);
     }
-    20% {
-      opacity: 0.3;
+    30% {
+        transform: translateY(-5px) rotate(-2deg);
     }
-    60% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 1;
+    50% {
+        opacity: 0.8;
+        transform: translateY(10px) rotate(5deg) scale(1.1);
     }
-    70% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 1;
-    }
-    85% {
-      transform: translateY(-5px) rotate(-2deg);
-      opacity: 1;
+    80% {
+        opacity: 0.5;
+        transform: translateY(-10px) rotate(-5deg);
     }
     100% {
-      transform: translateY(0) rotate(0deg);
-      opacity: 1;
+        opacity: 0;
+        transform: translateY(50px) rotate(15deg) scale(1.2);
     }
+} 
+
+.hero-description:hover .letter {
+    animation-play-state: running;
   }
-  
-  /* Add different delays for each letter */
-  .letter:nth-child(odd) {
-    animation-delay: calc(0.1s * var(--index));
-  }
-  
-  .letter:nth-child(even) {
-    animation-delay: calc(0.15s * var(--index));
-  }
+
 
 .hero-content p {
     font-size: 1.2rem;
@@ -384,6 +365,24 @@ nav ul li a:hover::after {
     animation: fadeIn 1.6s ease;
     justify-content: center;
     width: 100%;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.hero img {
+    position: absolute;
+    top: 150px;
+    left: 10px; /* Adjust the position */
+    width: 500px; /* Set an appropriate size */
+    animation: fadeIn 1.5s ease-in-out;
 }
 
 .btn {
@@ -726,6 +725,11 @@ section {
 }
 
 /* ===== Technology Section ===== */
+
+#technology {
+    height: 100vh;
+}
+
 .tech-showcase {
     background-color: var(--primary-dark);
 }
@@ -745,7 +749,7 @@ section {
 
 /* Sensor Icons Styling */
 .sensor-point {
-    position: absolute;
+    position: relative;
     z-index: 10;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -754,13 +758,78 @@ section {
 }
 
 /* Ensures sensor images do not overlap */
-.sensor-image {
+.sensor-image-1 {
     width: 200px;  /* Adjusted to new size */
     height: auto;
     display: block;
     position: absolute;
     transform: translate(-50%, -50%);
     z-index: 100;
+    margin-top: 130px;
+    margin-left: 0px;
+}
+
+.sensor-image-2 {
+    width: 200px;  /* Adjusted to new size */
+    height: auto;
+    display: block;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    margin-top: 130px;
+    margin-left: 20px;
+}
+
+.sensor-image-3 {
+    width: 150px;  /* Adjusted to new size */
+    height: auto;
+    display: block;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    margin-top: 130px;
+    margin-left: 100px;
+}
+
+.sensor-image-4 {
+    width: 150px;  /* Adjusted to new size */
+    height: auto;
+    display: block;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    margin-top: 130px;
+    margin-left: 130px;
+}
+
+.sensor-image-5 {
+    width: 150px;  /* Adjusted to new size */
+    height: auto;
+    display: block;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    margin-top: 130px;
+    margin-left: 130px;
+}
+
+.sensor-image-6 {
+    width: 150px;  /* Adjusted to new size */
+    height: auto;
+    display: block;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    margin-top: 130px;
+    margin-left: 150px;
+}
+
+.sensor-icon {
+    position: absolute;  /* Adjust this as per your layout */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);  /* This centers the icon */
+    /* Add any other styling for the icon */
 }
 
 /* Tooltip-style info box */
@@ -795,40 +864,41 @@ section {
 
 .sensor-point[data-sensor="fsr"] {
     top: 30%;
-    left: 20%;
+    left: 30%;
 }
 
 .sensor-point[data-sensor="imu"] {
     top: 50%;
-    left: 30%;
+    left: 40%;
 }
 
 .sensor-point[data-sensor="processor"] {
     top: 70%;
-    left: 40%;
+    left: 50%;
 }
 
 .sensor-point[data-sensor="display"] {
     top: 15%;
-    left: 65%;
+    left: 75%;
 }
 
 .sensor-point[data-sensor="microphone"] {
     top: 40%;
-    left: 75%;
+    left: 85%;
 }
 
 .sensor-point[data-sensor="speaker"] {
     top: 65%;
-    left: 85%;
+    left: 100%;
+    margin-right: 0px;
 }
 
 /* Positioning for info boxes to prevent overlap */
-.sensor-info {
+/* .sensor-info {
     top: calc(100% + 20px);
     left: 50%;
     transform: translateX(-50%);
-}
+} */
 
 
 
@@ -846,7 +916,7 @@ section {
     top: 45px;
     left: 0;
     width: 100%;
-    height: 2px;
+    height: 5px;
     background: linear-gradient(90deg, var(--accent-purple), var(--accent-purple-light));
     z-index: 0;
 }
@@ -1555,5 +1625,3 @@ footer {
     background-clip: text;
     color: transparent;
 }
-
-    
