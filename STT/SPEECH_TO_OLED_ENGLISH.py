@@ -1,4 +1,4 @@
-Speech to oled:
+# English speech to oled:
 import time
 import queue
 import sys
