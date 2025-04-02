@@ -139,7 +139,7 @@ void loop() {
 
             delay(20);  // 50Hz sampling rate (20ms delay)
         }
-
+        Serial.println("Sensor Reading Finished");
         // Send data over Bluetooth if connected and if there's data to send
         if (deviceConnected && !sensorLog.empty()) {
             Serial.println("Sending Data...");
@@ -160,10 +160,9 @@ void loop() {
                 }
 
                 // Send the message to the connected BLE client
-                // pCharacteristic->setValue(message.c_str());
-                // pCharacteristic->notify();
-                // Serial.println("Sent: " + message +" size: "+ message.length());
-                sendLargeMessage(message);
+                pCharacteristic->setValue(message.c_str());
+                pCharacteristic->notify();
+                delay(15);
                  
             }
 
@@ -211,25 +210,4 @@ void loop() {
         startSignalReceived = false;
         Serial.println("Waiting for the next START signal...");
     }
-}
-
-void sendLargeMessage(String message) {
-    int maxPacketSize = 20; // Adjust based on MTU (typically 512)
-    int messageLength = message.length();
-    int chunkCount = 0;
-
-    for (int i = 0; i < messageLength; i += maxPacketSize) {
-        String chunk = message.substring(i, i + maxPacketSize);
-        pCharacteristic->setValue(chunk.c_str());
-        pCharacteristic->notify();
-        chunkCount++;
-        Serial.println("Sent chunk " + String(chunkCount) + " of " + String((message.length() + maxPacketSize - 1) / maxPacketSize));
-        delay(18);  // Delay to avoid packet loss
-    }
-
-    // After sending all chunks, send "ROW_END" to indicate the end of the row
-    String rowEndMessage = "ROW_END";  // Special marker to signal end of row
-    pCharacteristic->setValue(rowEndMessage.c_str());
-    pCharacteristic->notify();
-    Serial.println("Sent: ROW_END");
 }
