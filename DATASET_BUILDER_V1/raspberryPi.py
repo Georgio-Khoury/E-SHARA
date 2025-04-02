@@ -6,6 +6,7 @@ import random
 import csv
 from multiprocessing import Process, Value, Lock,Event
 
+READING_TIME=10 #time to read each gest. in secs
 # Bluetooth configuration
 ESP32_MAC_ADDRESS = "fc:b4:67:f5:4b:ba"
 SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
@@ -17,8 +18,8 @@ PWR_MGMT_1 = 0x6B
 ACCEL_XOUT_H = 0x3B
 GYRO_XOUT_H = 0x43
 GYRO_ZOUT_H = 0x47
-ACCEL_SENSITIVITY = 16384.0  # Ã‚Â±2g
-GYRO_SENSITIVITY = 131.0     # Ã‚Â±250Ã‚Â°/s
+ACCEL_SENSITIVITY = 16384.0  # Â±2g
+GYRO_SENSITIVITY = 131.0     # Â±250Â°/s
 
 # Initialize I2C bus
 bus = smbus.SMBus(1)
@@ -32,12 +33,11 @@ class MyDelegate(btle.DefaultDelegate):
         btle.DefaultDelegate.__init__(self)
         self.characteristic = characteristic
         self.data = []
-        self.data_buffer = "" #this is for message chunks
         self.stop_event= stop_event
         self.saved=False
 
     def handleNotification(self, cHandle, data):
-        print(f"Raw data received: {data}")  # Debugging
+        #print(f"Raw data received: {data}")  # Debugging
         decoded_data = data.decode()
         if decoded_data == "DONE":
             
@@ -50,25 +50,12 @@ class MyDelegate(btle.DefaultDelegate):
                 self.save_data_to_csv()
                 self.saved=True
             self.stop_event.set()
-            return
-        if decoded_data == "ROW_END":
-            print("end of row")
-            self.data.append(self.data_buffer.split(","))
-            self.data_buffer = ""# Reset buffer for the next row
-            return
-            
-        print(f"Received chunk: {decoded_data}")
-        self.data_buffer += decoded_data  # Append to buffer
+            return       
+        self.data.append(decoded_data.split(","))
 
-#     def save_data_to_csv(self):
-#         with open('data.csv', mode='a', newline='') as file:
-#             writer = csv.writer(file)
-#             #writer.writerow(["Timestamp", "AccX", "AccY", "AccZ", "GyroX", "GyroY", "GyroZ", "Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "FSR1", "FSR2", "FSR3"])
-#             for row in self.data:
-#                 writer.writerow(row)
-#         print("Data saved to sensor_data.csv")
     def save_data_to_csv(self):
         print('entered save data')
+        print(self.data)
         file_name = 'data.csv'
 
         # Read existing data
@@ -85,13 +72,14 @@ class MyDelegate(btle.DefaultDelegate):
             writer.writerows(reader)
 
         print("Bluetooth data merged into sensor_data.csv") 
-def connect(stop_event):
+def connect(stop_event,start_event):
     while not stop_event.is_set():
         try:
             print("Connecting to ESP32...")
             device = btle.Peripheral(ESP32_MAC_ADDRESS)
             service = device.getServiceByUUID(SERVICE_UUID)
             characteristic = service.getCharacteristics(CHARACTERISTIC_UUID)[0]
+            device.setMTU(100)  # Set MTU to 100
 
             delegate = MyDelegate(characteristic,stop_event)  # Pass the characteristic
             device.setDelegate(delegate)
@@ -101,7 +89,7 @@ def connect(stop_event):
 
             print("Connected! Sending START signal to ESP32...")
             characteristic.write(b"START", withResponse=True)
-
+            start_event.set()
             print("Waiting for notifications...")
             while True:
                 if device.waitForNotifications(1.0):
@@ -142,7 +130,7 @@ def read_gyro_data():
     )
 
 def convert_accel_to_m_s2(raw_value):
-    """Converts raw accelerometer data to m/sÃ‚Â²."""
+    """Converts raw accelerometer data to m/sÂ²."""
     return raw_value / ACCEL_SENSITIVITY * 9.81
 
 def convert_gyro_to_dps(raw_value):
@@ -157,11 +145,12 @@ def read_mcp3008(channel):
     value = ((adc[1] & 3) << 8) + adc[2]
     return value
 
-def fsr_reader(fsr1_value, fsr2_value, fsr3_value, lock):
+def fsr_reader(fsr1_value, fsr2_value, fsr3_value, lock,start_event):
     """Reads FSR values continuously and stores them in shared memory."""
+    start_event.wait()
     print("FSR reader started.")
     start_time = time.time()
-    while time.time() - start_time < 8:
+    while time.time() - start_time < READING_TIME:
         with lock:
             fsr1_value.value = read_mcp3008(7)
             fsr2_value.value = read_mcp3008(6)
@@ -169,11 +158,12 @@ def fsr_reader(fsr1_value, fsr2_value, fsr3_value, lock):
         time.sleep(0.1)
     print("FSR reader finished.")
 
-def flex_reader(flex1_value, flex2_value, flex3_value, flex4_value, flex5_value, lock):
+def flex_reader(flex1_value, flex2_value, flex3_value, flex4_value, flex5_value, lock,start_event):
     """Reads flex sensor values continuously and stores them in shared memory."""
+    start_event.wait()
     print("Flex sensor reader started.")
     start_time = time.time()
-    while time.time() - start_time < 8:
+    while time.time() - start_time < READING_TIME:
         with lock:
             flex1_value.value = read_mcp3008(0)
             flex2_value.value = read_mcp3008(1)
@@ -183,15 +173,16 @@ def flex_reader(flex1_value, flex2_value, flex3_value, flex4_value, flex5_value,
         time.sleep(0.1)
     print("Flex sensor reader finished.")
 
-def imu_reader(fsr1_value, fsr2_value, fsr3_value, flex1_value, flex2_value, flex3_value, flex4_value, flex5_value, lock):
+def imu_reader(fsr1_value, fsr2_value, fsr3_value, flex1_value, flex2_value, flex3_value, flex4_value, flex5_value, lock,start_event):
     """Reads IMU data and stores it along with FSR and Flex sensor values in a buffer."""
+    start_event.wait()
     print("IMU reader started. Collecting data...")
     data_buffer = []
     sampling_interval = 1/50 #50hz
     start_time = time.time()
     index=1
     
-    while time.time() - start_time < 10:
+    while time.time() - start_time < READING_TIME:
         accel_x, accel_y, accel_z = read_accel_data()
         gyro_x, gyro_y, gyro_z = read_gyro_data()
 
@@ -240,19 +231,20 @@ def main():
     flex4_value = Value('i', 0)
     flex5_value = Value('i', 0)
     lock = Lock()
+    start_event = Event()
     stop_event = Event()
 
     # Initialize Bluetooth delegate
     #delegate = MyDelegate(characteristic=None)
 
     # Start Bluetooth connection in a separate process
-    bt_process = Process(target=connect, args = (stop_event,))
+    bt_process = Process(target=connect, args = (stop_event,start_event))
     bt_process.start()
 
     # Start sensor reading processes
-    fsr_process = Process(target=fsr_reader, args=(fsr1_value, fsr2_value, fsr3_value, lock))
-    flex_process = Process(target=flex_reader, args=(flex1_value, flex2_value, flex3_value, flex4_value, flex5_value, lock))
-    imu_process = Process(target=imu_reader, args=(fsr1_value, fsr2_value, fsr3_value, flex1_value, flex2_value, flex3_value, flex4_value, flex5_value, lock))
+    fsr_process = Process(target=fsr_reader, args=(fsr1_value, fsr2_value, fsr3_value, lock,start_event))
+    flex_process = Process(target=flex_reader, args=(flex1_value, flex2_value, flex3_value, flex4_value, flex5_value, lock,start_event))
+    imu_process = Process(target=imu_reader, args=(fsr1_value, fsr2_value, fsr3_value, flex1_value, flex2_value, flex3_value, flex4_value, flex5_value, lock,start_event))
     
     print("Starting data collection...")
     fsr_process.start()
