@@ -3,30 +3,27 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 def send_email(subject, body):
-    
-    sender_email = "aya.jouni02@lau.edu"  
+    sender_email = "razan.hmede@lau.edu"
     receiver_emails = [
-        "razan.hmede@lau.edu",  
+        "aya.jouni02@lau.edu",  
         "farah.alnassar@lau.edu",  
-        "georgio.elkhoury@lau.edu"  
+        "georgio.elkhoury@lau.edu",
+        "razan.hmede@lau.edu"
     ]
-    password = "your_password" # put your pass here!!!!
-
-    
-    msg = MIMEMultipart()
-    msg['From'] = sender_email
-    msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+    password = "pass" 
 
     try:
-      
-        server = smtplib.SMTP('smtp.office365.com', 587)  
-        server.starttls()  
-        server.login(sender_email, password)  
+        server = smtplib.SMTP('smtp.office365.com', 587)
+        server.starttls()
+        server.login(sender_email, password)
 
-      
         for receiver_email in receiver_emails:
+            msg = MIMEMultipart()
+            msg['From'] = sender_email
             msg['To'] = receiver_email
+            msg['Subject'] = subject
+            msg.attach(MIMEText(body, 'plain'))
+
             server.sendmail(sender_email, receiver_email, msg.as_string())
 
         print("Email sent successfully!")
@@ -39,5 +36,5 @@ def send_email(subject, body):
 
 if __name__ == "__main__":
     subject = "Sensor Data Update"
-    body = "This is an update with the real-time sensor data from the gloves."
+    body = "hello" 
     send_email(subject, body)
