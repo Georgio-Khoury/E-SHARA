@@ -542,3 +542,242 @@ function createBreakingTextEffect() {
     
     // Add any other existing initialization code here
   });
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const sliderWrapper = document.querySelector(".slider-wrapper");
+    const slides = document.querySelectorAll(".slide");
+    const dotsContainer = document.querySelector(".slider-dots");
+    const prevButton = document.querySelector(".prev-slide");
+    const nextButton = document.querySelector(".next-slide");
+    const progressBar = document.querySelector(".progress-bar");
+  
+    let currentIndex = 0;
+    let slideWidth = slides[0].clientWidth;
+    let autoPlayInterval;
+    let isDragging = false;
+    let startPosition = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+  
+    // Initialize slider
+    function initSlider() {
+      // Set initial slide width
+      updateSlideWidth();
+  
+      // Create dots
+      slides.forEach((_, index) => {
+        const dot = document.createElement("div");
+        dot.classList.add("dot");
+        if (index === 0) dot.classList.add("active");
+        dot.addEventListener("click", () => goToSlide(index));
+        dotsContainer.appendChild(dot);
+      });
+  
+      // Apply initial tech color
+      updateTechColor();
+  
+      // Set up event listeners
+      prevButton.addEventListener("click", prevSlide);
+      nextButton.addEventListener("click", nextSlide);
+  
+      // Touch and mouse events
+      sliderWrapper.addEventListener("mousedown", startDrag);
+      sliderWrapper.addEventListener("touchstart", startDrag);
+      sliderWrapper.addEventListener("mousemove", drag);
+      sliderWrapper.addEventListener("touchmove", drag);
+      sliderWrapper.addEventListener("mouseup", endDrag);
+      sliderWrapper.addEventListener("touchend", endDrag);
+      sliderWrapper.addEventListener("mouseleave", endDrag);
+  
+      // Window resize event
+      window.addEventListener("resize", () => {
+        updateSlideWidth();
+        goToSlide(currentIndex);
+      });
+  
+      // Start autoplay
+      startAutoPlay();
+    }
+  
+    // Update slide width on resize
+    function updateSlideWidth() {
+      slideWidth = sliderWrapper.clientWidth;
+      slides.forEach((slide) => {
+        slide.style.minWidth = `${slideWidth}px`;
+      });
+    }
+  
+    // Go to specific slide
+    function goToSlide(index) {
+      if (index < 0) index = slides.length - 1;
+      if (index >= slides.length) index = 0;
+  
+      currentIndex = index;
+      const position = -slideWidth * currentIndex;
+  
+      // Update slider position
+      sliderWrapper.style.transform = `translateX(${position}px)`;
+  
+      // Update dots
+      updateDots();
+  
+      // Update tech color
+      updateTechColor();
+  
+      // Reset progress bar animation
+      resetProgressBar();
+    }
+  
+    // Previous slide
+    function prevSlide() {
+      goToSlide(currentIndex - 1);
+      resetAutoPlay();
+    }
+  
+    // Next slide
+    function nextSlide() {
+      goToSlide(currentIndex + 1);
+      resetAutoPlay();
+    }
+  
+    // Update dots
+    function updateDots() {
+      const dots = document.querySelectorAll(".dot");
+      dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === currentIndex);
+      });
+    }
+  
+    // Update tech color
+    function updateTechColor() {
+      document.documentElement.style.setProperty("--tech-color", "#870df1");
+    }
+  
+    // Start autoplay
+    function startAutoPlay() {
+      resetProgressBar();
+      autoPlayInterval = setInterval(() => {
+        nextSlide();
+      }, 5000);
+    }
+  
+    // Reset autoplay
+    function resetAutoPlay() {
+      clearInterval(autoPlayInterval);
+      startAutoPlay();
+    }
+  
+    // Reset progress bar
+    function resetProgressBar() {
+      progressBar.style.width = "0%";
+      setTimeout(() => {
+        progressBar.style.transition = "width 5s linear";
+        progressBar.style.width = "100%";
+      }, 50);
+    }
+  
+    // Start drag
+    function startDrag(event) {
+      isDragging = true;
+      startPosition = getPositionX(event);
+      prevTranslate = currentTranslate;
+  
+      // Pause transition during drag
+      sliderWrapper.style.transition = "none";
+  
+      // Stop autoplay while dragging
+      clearInterval(autoPlayInterval);
+    }
+  
+    // Drag
+    function drag(event) {
+      if (isDragging) {
+        const currentPosition = getPositionX(event);
+        currentTranslate = prevTranslate + currentPosition - startPosition;
+  
+        // Limit drag to adjacent slides only
+        const minTranslate = -slideWidth * (slides.length - 1) - slideWidth * 0.2;
+        const maxTranslate = slideWidth * 0.2;
+  
+        if (currentTranslate < minTranslate) currentTranslate = minTranslate;
+        if (currentTranslate > maxTranslate) currentTranslate = maxTranslate;
+  
+        sliderWrapper.style.transform = `translateX(${currentTranslate}px)`;
+      }
+    }
+  
+    // End drag
+    function endDrag() {
+      if (!isDragging) return;
+      isDragging = false;
+  
+      // Restore transition
+      sliderWrapper.style.transition = "transform 0.6s ease-in-out";
+  
+      // Calculate the moved distance
+      const movedDistance = currentTranslate - prevTranslate;
+  
+      // Determine if we should change slides
+      if (movedDistance < -slideWidth * 0.2) {
+        nextSlide();
+      } else if (movedDistance > slideWidth * 0.2) {
+        prevSlide();
+      } else {
+        goToSlide(currentIndex);
+      }
+  
+      // Restart autoplay after drag
+      startAutoPlay();
+    }
+  
+    // Get position X from event
+    function getPositionX(event) {
+      return event.type.includes("mouse")
+        ? event.pageX
+        : event.touches[0].clientX;
+    }
+  
+    // Initialize
+    initSlider();
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const gloveViewer = document.querySelector('.glove-viewer');
+    const frontView = document.querySelector('.front-view');
+    const backView = document.querySelector('.back-view');
+    const viewLabel = document.querySelector('.view-label');
+    
+    let showingFront = true;
+    
+    gloveViewer.addEventListener('click', function() {
+      // Toggle between front and back views
+      if (showingFront) {
+        frontView.classList.remove('active');
+        backView.classList.add('active');
+        viewLabel.textContent = 'Click to view front';
+      } else {
+        backView.classList.remove('active');
+        frontView.classList.add('active');
+        viewLabel.textContent = 'Click to view back';
+      }
+      
+      showingFront = !showingFront;
+      
+      // Add animation effect
+      gloveViewer.style.animation = 'flip 0.5s ease';
+      setTimeout(() => {
+        gloveViewer.style.animation = '';
+      }, 500);
+    });
+  });
+  
+  // Add this to your CSS
+  const style = document.createElement('style');
+  style.textContent = `
+    @keyframes flip {
+      0% { transform: rotateY(0); }
+      50% { transform: rotateY(90deg); }
+      100% { transform: rotateY(0); }
+    }
+  `;
+  document.head.appendChild(style);
