@@ -2060,3 +2060,482 @@ footer {
   @keyframes spin {
     to { transform: translate(-50%, -50%) rotate(360deg); }
   }
+
+  /* Additional Responsive Design Improvements */
+
+/* General Responsive Adjustments */
+@media (max-width: 1200px) {
+    .hero-content {
+        padding: 1rem;
+        max-width: 90%;
+    }
+    
+    .english-logo {
+        font-size: 3.5rem;
+    }
+    
+    .arabic-logo {
+        font-size: 3.2rem;
+    }
+    
+    .hero-tagline {
+        font-size: 4rem !important;
+    }
+    
+    .hero-description {
+        font-size: 1.2rem;
+    }
+    
+    .responsive-img {
+        height: auto;
+        max-height: 1000px;
+    }
+}
+
+@media (max-width: 992px) {
+    .hero-content {
+        max-width: 95%;
+    }
+    
+    .english-logo {
+        font-size: 3rem;
+    }
+    
+    .arabic-logo {
+        font-size: 2.7rem;
+    }
+    
+    .hero-tagline {
+        font-size: 3.5rem !important;
+    }
+    
+    /* Adjust process flow for medium screens */
+    .process-flow {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+    }
+    
+    /* Tech diagram adjustments */
+    .sensor-image-1, .sensor-image-2, .sensor-image-3, 
+    .sensor-image-4, .sensor-image-5, .sensor-image-6, .sensor-image-7 {
+        width: 80%;
+        max-width: 150px;
+        margin-left: 0;
+        margin-top: 100px;
+    }
+    
+    /* Adjust slider height */
+    .slider-wrapper {
+        height: 500px;
+    }
+    
+    /* Model container adjustments */
+    .model-container {
+        max-height: 500px;
+    }
+    
+    .glove-image.active {
+        max-height: 400px;
+    }
+    
+    /* Timeline adjustments */
+    .timeline {
+        padding-left: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    /* Header adjustments */
+    .logo img {
+        height: 60px;
+    }
+    
+    /* Hero section adjustments */
+    .english-logo {
+        font-size: 2.5rem;
+    }
+    
+    .arabic-logo {
+        font-size: 2.2rem;
+    }
+    
+    .hero-tagline {
+        font-size: 2.8rem !important;
+        margin-bottom: 15px;
+    }
+    
+    .hero-description {
+        font-size: 1rem;
+    }
+    
+    .btn {
+        padding: 12px 25px;
+        font-size: 0.9rem;
+    }
+    
+    /* Adjust section spacing */
+    section {
+        padding: 70px 0;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+    }
+    
+    /* Features grid for smaller screens */
+    .features-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    /* Process step adjustments */
+    .process-step {
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 30px;
+    }
+    
+    .step-number {
+        width: 70px;
+        height: 70px;
+        font-size: 1.5rem;
+    }
+    
+    /* Technology section adjustments */
+    .tech-diagram {
+        padding: 0 15px;
+    }
+    
+    .sensor-point {
+        width: 150px;
+    }
+    
+    .sensor-image-7 {
+        margin-top: 300px;
+        width: 300px;
+    }
+    
+    /* Slider container adjustments */
+    .slider-container {
+        max-width: 90%;
+    }
+    
+    /* 3D viewer adjustments */
+    .glove-viewer {
+        max-width: 100%;
+        padding: 15px;
+    }
+    
+    /* Demo section adjustments */
+    .demo-container {
+        gap: 30px;
+    }
+    
+    /* CTA buttons adjustment */
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .cta .btn {
+        width: 80%;
+    }
+}
+
+@media (max-width: 576px) {
+    .container {
+        padding: 0 15px;
+    }
+    
+    .english-logo {
+        font-size: 2rem;
+    }
+    
+    .arabic-logo {
+        font-size: 1.8rem;
+    }
+    
+    .hero-tagline {
+        font-size: 2.2rem !important;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    
+    /* Process flow simplification */
+    .process-flow {
+        display: none;
+    }
+    
+    /* Team members display */
+    .team-members {
+        justify-content: center;
+    }
+    
+    .team-member {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    /* Technology section adjustments */
+    #technology {
+        height: auto;
+        min-height: 100vh;
+    }
+    
+    .sensor-point[data-sensor] {
+        position: static;
+        margin: 10px auto;
+        display: block;
+    }
+    
+    .sensor-info {
+        position: static;
+        opacity: 1;
+        margin: 10px auto;
+        max-width: 90%;
+    }
+    
+    /* Slider adjustments for very small screens */
+    .slider-wrapper {
+        height: 400px;
+    }
+    
+    .slide-title {
+        font-size: 20px;
+        margin: 40px 0 10px;
+    }
+    
+    .slide-description {
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
+    
+    /* Footer adjustments */
+    .footer-content {
+        gap: 20px;
+    }
+    
+    .footer-column h4 {
+        font-size: 1rem;
+    }
+    
+    .footer-menu {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .logo-text {
+        font-size: 1.2rem;
+    }
+    
+    .english-logo {
+        font-size: 1.8rem;
+    }
+    
+    .arabic-logo {
+        font-size: 1.6rem;
+    }
+    
+    .hero-tagline {
+        font-size: 1.8rem !important;
+    }
+    
+    /* Simplify hero animations on small screens */
+    .hero-tagline .letter,
+    .hero-description .letter {
+        animation: none;
+        opacity: 1;
+    }
+    
+    /* Make design items more compact */
+    .design-item {
+        gap: 15px;
+    }
+    
+    .design-description h3 {
+        font-size: 1.4rem;
+    }
+    
+    /* Timeline modifications for small screens */
+    .timeline-marker {
+        width: 28px;
+        height: 28px;
+        left: -14px;
+        font-size: 0.8rem;
+    }
+    
+    .timeline-content h3 {
+        font-size: 1.2rem;
+    }
+    
+    /* Model viewer simplifications */
+    .model-container {
+        padding: 10px;
+        margin: 15px auto;
+    }
+    
+    .glove-image.active {
+        max-height: 300px;
+    }
+    
+    .hotspot {
+        width: 15px;
+        height: 15px;
+    }
+    
+    /* CTA section */
+    .cta {
+        padding: 50px 0;
+    }
+    
+    .cta h2 {
+        font-size: 1.8rem;
+    }
+    
+    .cta .btn {
+        width: 90%;
+    }
+}
+
+/* Additional specific fixes */
+
+/* Fix for mobile nav */
+@media (max-width: 768px) {
+    nav.active {
+        height: auto;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    nav ul li {
+        width: 100%;
+        text-align: center;
+    }
+    
+    nav ul li a {
+        display: block;
+        padding: 12px 0;
+    }
+    
+    /* Fixed position for header when nav is open */
+    header.nav-open {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+    }
+}
+
+/* Fix for technology section layout on mobile */
+@media (max-width: 576px) {
+    .tech-diagram {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .hand-diagram {
+        width: 90%;
+        margin: 0 auto;
+    }
+    
+    /* Stack sensors vertically instead of absolute positioning */
+    .tech-diagram {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .sensor-points-container {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        margin-top: 20px;
+        width: 100%;
+        align-items: center;
+    }
+    
+    .sensor-point {
+        position: static;
+        transform: none;
+        margin: 5px 0;
+    }
+    
+    .sensor-info {
+        position: static;
+        transform: none;
+        opacity: 1;
+        margin: 5px auto 15px;
+        width: 90%;
+    }
+}
+
+/* Optimize images for mobile */
+@media (max-width: 768px) {
+    .responsive-img {
+        height: auto;
+    }
+    
+    .team-photo img {
+        height: auto;
+    }
+    
+    .about-image img {
+        height: auto;
+    }
+}
+
+/* Fix for slider controls on small screens */
+@media (max-width: 576px) {
+    .slider-controls {
+        bottom: 20%;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+    
+    .slider-arrow {
+        width: 30px;
+        height: 30px;
+    }
+    
+    .dot {
+        width: 8px;
+        height: 8px;
+    }
+}
+
+/* Make buttons more tap-friendly on mobile */
+@media (max-width: 576px) {
+    .btn {
+        padding: 14px 28px;
+        margin: 5px 0;
+    }
+    
+    .social-link {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .footer-links a {
+        padding: 8px 0;
+        display: block;
+    }
+}
