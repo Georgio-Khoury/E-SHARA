@@ -2549,4 +2549,74 @@ footer {
     .slider-progress {
       height: 3px; /* Even smaller on extra small screens */
     }
+  }
+  @media (max-width: 1024px) {
+    .process-step {
+      width: 48%; /* Two items per row on medium screens */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .section-title {
+      font-size: 2rem; /* Smaller section title on tablets */
+    }
+  
+    .section-subtitle {
+      font-size: 1rem; /* Smaller subtitle on tablets */
+    }
+  
+    .process-flow {
+      padding: 0;
+    }
+  
+    .process-step {
+      width: 100%; /* Full-width steps on smaller screens */
+      margin-bottom: 20px;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .section-title {
+      font-size: 1.8rem; /* Adjust for smaller screens */
+    }
+  
+    .section-subtitle {
+      font-size: 0.9rem; /* Adjust subtitle size */
+    }
+  
+    .process-step {
+      padding: 15px; /* Less padding for small screens */
+    }
+  
+    .step-number {
+      font-size: 1.5rem; /* Adjust number size for mobile */
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+    }
+  
+    .step-title {
+      font-size: 1.2rem; /* Adjust title size for mobile */
+    }
+  
+    .step-description {
+      font-size: 0.9rem; /* Adjust description size for mobile */
+    }
+  }
+ 
+@media (max-width: 768px) {
+    .hero img {
+        width: 250px; /* Shrink the avatar on mobile */
+        margin-bottom: 25px;
+        margin-top: -50px;
+    }
+
+    .tagline {
+        font-size: 1rem;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
 }
