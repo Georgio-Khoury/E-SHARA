@@ -2539,3 +2539,14 @@ footer {
         display: block;
     }
 }
+@media (max-width: 768px) {
+    .slider-progress {
+      height: 4px; /* Slightly smaller on smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .slider-progress {
+      height: 3px; /* Even smaller on extra small screens */
+    }
+}
