@@ -142,6 +142,8 @@ nav ul li a::after {
 
 nav ul li a:hover::after {
     width: 100%;
+    background: linear-gradient(90deg, #9D4EDD 0%, #7B2CBF 100%); /* light purple gradient */
+    color: #FFFFFF; /* keep white text */
 }
 
 .active::after {
@@ -924,6 +926,7 @@ section {
     justify-content: space-between;
     position: relative;
     margin-top: 50px;
+   
 }
 
 .process-flow-section::before {
@@ -2278,7 +2281,21 @@ footer {
     
     /* Process flow simplification */
     .process-flow {
-        display: none;
+        flex-direction: column;
+        align-items: center;
+        padding: 0 15px;
+        width: 100%;
+    }
+    .visualization-element {
+        width: 50px;
+        height: 50px;
+        font-size: 1.4rem;
+    }
+    .step-title {
+        font-size: 1rem;
+    }
+    .step-description {
+        font-size: 0.85rem;
     }
     
     /* Team members display */
@@ -2539,84 +2556,49 @@ footer {
         display: block;
     }
 }
+/* For screens 768px and below (tablets and mobile) */
 @media (max-width: 768px) {
     .slider-progress {
-      height: 4px; /* Slightly smaller on smaller screens */
+        height: 4px; /* make it a bit thicker */
     }
-  }
-  
-  @media (max-width: 480px) {
-    .slider-progress {
-      height: 3px; /* Even smaller on extra small screens */
+    
+    .progress-bar {
+        transition: width 1.2s linear !important; /* force mobile animation */
+        height: 100%;
+        background-color: var(--tech-color, #9D4EDD); /* keep nice gradient */
     }
-  }
-  @media (max-width: 1024px) {
-    .process-step {
-      width: 48%; /* Two items per row on medium screens */
-    }
-  }
-  
-  @media (max-width: 768px) {
-    .section-title {
-      font-size: 2rem; /* Smaller section title on tablets */
-    }
-  
-    .section-subtitle {
-      font-size: 1rem; /* Smaller subtitle on tablets */
-    }
-  
-    .process-flow {
-      padding: 0;
-    }
-  
-    .process-step {
-      width: 100%; /* Full-width steps on smaller screens */
-      margin-bottom: 20px;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .section-title {
-      font-size: 1.8rem; /* Adjust for smaller screens */
-    }
-  
-    .section-subtitle {
-      font-size: 0.9rem; /* Adjust subtitle size */
-    }
-  
-    .process-step {
-      padding: 15px; /* Less padding for small screens */
-    }
-  
-    .step-number {
-      font-size: 1.5rem; /* Adjust number size for mobile */
-      width: 35px;
-      height: 35px;
-      line-height: 35px;
-    }
-  
-    .step-title {
-      font-size: 1.2rem; /* Adjust title size for mobile */
-    }
-  
-    .step-description {
-      font-size: 0.9rem; /* Adjust description size for mobile */
-    }
-  }
- 
-@media (max-width: 768px) {
     .hero img {
-        width: 250px; /* Shrink the avatar on mobile */
-        margin-bottom: 25px;
-        margin-top: -50px;
+      width: 170px; /* Shrink the avatar on mobile */
+      margin-bottom: 25px;
+      margin-top: -80px;
     }
-
+  
     .tagline {
-        font-size: 1rem;
+      font-size: 1rem;
     }
-
+  
     .hero-buttons {
+      flex-direction: column;
+      gap: 15px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .process-flow {
         flex-direction: column;
-        gap: 15px;
+        align-items: center;
+        padding: 0 15px;
+        width: 100%;
+    }
+    .visualization-element {
+        margin-bottom: 20px;
+    }
+    .visualization-arrow {
+        display: none; /* Hide arrows if they don't fit nicely */
     }
 }
+
+section {
+    scroll-margin-top: 140px; /* or 120px if your navbar is bigger */
+  }
+  
