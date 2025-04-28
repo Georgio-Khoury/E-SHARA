@@ -2601,4 +2601,18 @@ footer {
 section {
     scroll-margin-top: 140px; /* or 120px if your navbar is bigger */
   }
+  .video-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: -20px auto 0;
+    padding-top: 0;
+  }
   
+  .glove-video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
