@@ -10,6 +10,8 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from email.mime.base import MIMEBase
 from email import encoders
+import pandas as pd
+import matplotlib.pyplot as plt
 
 READING_TIME = 10  # time to read each gest. in secs
 # Bluetooth configuration
@@ -396,6 +398,22 @@ def main():
     send_email(subject, body, "data.csv")
     print("Dataset recording complete.")
 
+    # Plot the collected sensor data
+    df = pd.read_csv('data.csv')
+
+    sensor_columns = [
+        'BT_AccX', 'BT_AccY', 'BT_AccZ',
+        'BT_GyroX', 'BT_GyroY', 'BT_GyroZ',
+        'BT_Flex1', 'BT_Flex2', 'BT_Flex3', 'BT_Flex4', 'BT_Flex5',
+        'BT_FSR1', 'BT_FSR2', 'BT_FSR3'
+    ]
+
+    sensor_data = df[sensor_columns].apply(pd.to_numeric, errors='coerce')
+
+    sensor_data.plot(subplots=True, figsize=(12, 10))
+    plt.suptitle('Sensor Data After Header', fontsize=16)
+    plt.tight_layout()
+    plt.show()
 
 if __name__ == "__main__":
     main()
