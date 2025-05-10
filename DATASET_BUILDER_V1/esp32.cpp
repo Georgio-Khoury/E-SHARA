@@ -104,7 +104,7 @@ void setup() {
 void loop() {
     if (startSignalReceived) {
         unsigned long startTime = millis();
-        unsigned long duration = 4000; // 10 seconds
+        unsigned long duration = 5000; // 10 seconds
 
         sensorLog.clear();  // Clear previous data
         unsigned long test = 1;
