@@ -1,25 +1,36 @@
 from bluepy import btle
 import time
+import datetime
 import smbus
 import spidev
 import random
+import pandas as pd
+import matplotlib.pyplot as plt
 import csv
 from multiprocessing import Process, Value, Lock,Event
 
-READING_TIME=10 #time to read each gest. in secs
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.base import MIMEBase
+from email import encoders
+
+email_PASSWORD = ""
+
+READING_TIME=5 #time to read each gest. in secs
 # Bluetooth configuration
 ESP32_MAC_ADDRESS = "fc:b4:67:f5:4b:ba"
 SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8"
-
+filename = "data_i1.csv"
 # MPU6050 I2C address and registers
 MPU6050_ADDR = 0x68
 PWR_MGMT_1 = 0x6B
 ACCEL_XOUT_H = 0x3B
 GYRO_XOUT_H = 0x43
 GYRO_ZOUT_H = 0x47
-ACCEL_SENSITIVITY = 16384.0  # Â±2g
-GYRO_SENSITIVITY = 131.0     # Â±250Â°/s
+ACCEL_SENSITIVITY = 16384.0  # Ã‚Â±2g
+GYRO_SENSITIVITY = 131.0     # Ã‚Â±250Ã‚Â°/s
 
 # Initialize I2C bus
 bus = smbus.SMBus(1)
@@ -33,6 +44,7 @@ class MyDelegate(btle.DefaultDelegate):
         btle.DefaultDelegate.__init__(self)
         self.characteristic = characteristic
         self.data = []
+        #self.data_buffer = "" #this is for message chunks
         self.stop_event= stop_event
         self.saved=False
 
@@ -50,16 +62,34 @@ class MyDelegate(btle.DefaultDelegate):
                 self.save_data_to_csv()
                 self.saved=True
             self.stop_event.set()
-            return       
+            return
+#         if decoded_data == "ROW_END":
+#             print("end of row")
+#             self.data.append(self.data_buffer.split(","))
+#             self.data_buffer = ""# Reset buffer for the next row
+#             return
+            
+       # print(f"Received chunk: {decoded_data}")
+        #self.data_buffer += decoded_data  # Append to buffer
         self.data.append(decoded_data.split(","))
+        
+#     def save_data_to_csv(self):
+#         with open('data.csv', mode='a', newline='') as file:
+#             writer = csv.writer(file)
+#             #writer.writerow(["Timestamp", "AccX", "AccY", "AccZ", "GyroX", "GyroY", "GyroZ", "Flex1", "Flex2", "Flex3", "Flex4", "Flex5", "FSR1", "FSR2", "FSR3"])
+#             for row in self.data:
+#                 writer.writerow(row)
+#         print("Data saved to sensor_data.csv")
 
     def save_data_to_csv(self):
         print('entered save data')
         print(self.data)
-        file_name = 'data.csv'
+        
+        
+        #file_name = f"data_{datetime.datetime.now().strftime('%t%m%d_%H%M%S')}.csv"
 
         # Read existing data
-        with open(file_name, mode='r', newline='') as file:
+        with open(filename, mode='r', newline='') as file:
             reader = list(csv.reader(file))  
 
         # Insert Bluetooth data into existing rows (starting from row 1, skipping the header)
@@ -67,7 +97,7 @@ class MyDelegate(btle.DefaultDelegate):
             reader[i].extend(self.data[i - 1])  # Append Bluetooth data to existing IMU rows
 
         # Write updated data back to the file
-        with open(file_name, mode='w', newline='') as file:
+        with open(filename, mode='w', newline='') as file:
             writer = csv.writer(file)
             writer.writerows(reader)
 
@@ -98,21 +128,57 @@ def connect(stop_event,start_event):
                     break
         except btle.BTLEException as e:
             print(f"Connection lost: {e}. Reconnecting in 1 second...")
-            time.sleep(1)
+            time.sleep(5)
         except KeyboardInterrupt:
             print("Exiting...")
             break
 
 
+def send_email(subject, body, attachment_path):
+    sender_email = "georgio.elkhoury@lau.edu"
+    receiver_emails = [
+        "razan.hmede@lau.edu",
+        "farah.alnassar@lau.edu",
+        "georgio.elkhoury@lau.edu",
+        "aya.jouni02@lau.edu",
+    ]
+    sender_password = email_PASSWORD  # Replace with your actual password
+
+    msg = MIMEMultipart()
+    msg["From"] = sender_email
+    msg["To"] = ", ".join(receiver_emails)
+    msg["Subject"] = subject
+
+    
+    msg.attach(MIMEText(body, "plain"))
+
+ 
+    with open(attachment_path, "rb") as attachment:
+        part = MIMEBase("application", "octet-stream")
+        part.set_payload(attachment.read())
+        encoders.encode_base64(part)
+        part.add_header("Content-Disposition", f"attachment; filename={attachment_path}")
+        msg.attach(part)
+
+    try:
+        server = smtplib.SMTP("smtp.office365.com", 587)
+        server.starttls()
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, receiver_emails, msg.as_string())
+        server.quit()
+        print("Email sent successfully!")
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        
 def read_word(reg):
     """Reads a 16-bit value from the specified MPU6050 register."""
-    #high = bus.read_byte_data(MPU6050_ADDR, reg)
-    #low = bus.read_byte_data(MPU6050_ADDR, reg + 1)
-    #value = (high << 8) + low
-    #if value >= 0x8000:
-     #   value -= 65536
-    #return value
-    return random.randint(-32768,32768)
+    high = bus.read_byte_data(MPU6050_ADDR, reg)
+    low = bus.read_byte_data(MPU6050_ADDR, reg + 1)
+    value = (high << 8) + low
+    if value >= 0x8000:
+        value -= 65536
+    return value
+    #return random.randint(-32768,32768)
 def read_accel_data():
     """Reads accelerometer data from MPU6050."""
     return (
@@ -130,7 +196,7 @@ def read_gyro_data():
     )
 
 def convert_accel_to_m_s2(raw_value):
-    """Converts raw accelerometer data to m/sÂ²."""
+    """Converts raw accelerometer data to m/sÃ‚Â²."""
     return raw_value / ACCEL_SENSITIVITY * 9.81
 
 def convert_gyro_to_dps(raw_value):
@@ -184,6 +250,7 @@ def imu_reader(fsr1_value, fsr2_value, fsr3_value, flex1_value, flex2_value, fle
     
     while time.time() - start_time < READING_TIME:
         accel_x, accel_y, accel_z = read_accel_data()
+        
         gyro_x, gyro_y, gyro_z = read_gyro_data()
 
         accel_x_m_s2 = convert_accel_to_m_s2(accel_x)
@@ -209,7 +276,8 @@ def imu_reader(fsr1_value, fsr2_value, fsr3_value, flex1_value, flex2_value, fle
         time.sleep(sampling_interval)  # Ensure 50 Hz sampling rate
 
     print("IMU data collection finished. Writing to CSV...")
-    with open('data.csv', mode='w', newline='') as file:
+    
+    with open(filename, mode='w', newline='') as file:
         writer = csv.writer(file)
         writer.writerow(['index', 'accel_x_m_s2', 'accel_y_m_s2', 'accel_z_m_s2',
                          'gyro_x_dps', 'gyro_y_dps', 'gyro_z_dps', 'fsr1_value', 'fsr2_value', 'fsr3_value',
@@ -255,8 +323,29 @@ def main():
     flex_process.join()
     imu_process.join()
     bt_process.join()
+    
+    subject = "A"
+    body = "Attached is the latest sensor data collected from the Raspberry Pi."
+    send_email(subject, body, filename)
 
     print("Dataset recording complete.")
+      # Plot the collected sensor data
+    df = pd.read_csv(filename)
+
+    sensor_columns = [
+        'BT_AccX', 'BT_AccY', 'BT_AccZ',
+        'BT_GyroX', 'BT_GyroY', 'BT_GyroZ',
+        'BT_Flex1', 'BT_Flex2', 'BT_Flex3', 'BT_Flex4', 'BT_Flex5',
+        'BT_FSR1', 'BT_FSR2', 'BT_FSR3'
+    ]
+
+    sensor_data = df[sensor_columns].apply(pd.to_numeric, errors='coerce')
+
+    sensor_data.plot(subplots=True, figsize=(12, 10))
+    plt.suptitle('Sensor Data After Header', fontsize=16)
+    plt.tight_layout()
+    plt.show()
+    
     
 
 if __name__ == '__main__':
